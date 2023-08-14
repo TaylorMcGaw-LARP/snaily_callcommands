@@ -82,21 +82,12 @@ if pluginConfig.enabled then
                 }
             }
             debugLog("sending call!")
-            performApiRequest(data, '911-calls','POST', function() end)
+            performApiRequest(data, '911-calls','POST','', function() end)
         else
             debugPrint("[SonoranCAD] API sending is disabled. Incoming call ignored.")
         end
     end)
 
-    ---------------------------------
-    -- Unit Panic
-    ---------------------------------
-    -- shared function to send panic signals
-    function sendPanic(source)
-        -- Determine identifier
-        local identifier = GetIdentifiers(source)[Config.primaryIdentifier]
-        -- Process panic POST request
-        performApiRequest({{['isPanic'] = true, ['apiId'] = identifier}}, 'UNIT_PANIC', function() end)
-    end
+
 
 end
