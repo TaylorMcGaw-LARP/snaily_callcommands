@@ -2,7 +2,7 @@
     Sonaran CAD Plugins
 
     Plugin Name: callcommands
-    Creator: SonoranCAD
+    Creator: snailyCAD
     Description: Implements 311/511/911 commands
 ]]
 
@@ -41,9 +41,9 @@ if pluginConfig.enabled then
                 caller = GetPlayerName(source) 
             end
             -- Sending the API event
-            TriggerEvent('SonoranCAD::callcommands:SendCallApi',playerCoords, caller, callLocation, description, source)
+            TriggerEvent('snailyCAD::callcommands:SendCallApi',playerCoords, caller, callLocation, description, source)
             -- Sending the user a message stating the call has been sent
-            TriggerClientEvent("chat:addMessage", source, {args = {"^0^5^*[SonoranCAD]^r ", "^7Your call has been sent to dispatch. Help is on the way!"}})
+            TriggerClientEvent("chat:addMessage", source, {args = {"^0^5^*[snailyCAD]^r ", "^7Your call has been sent to dispatch. Help is on the way!"}})
         else
             -- Throwing an error message due to now call description stated
             TriggerClientEvent("chat:addMessage", source, {args = {"^0[ ^1Error ^0] ", "You need to specify a call description."}})
@@ -61,8 +61,8 @@ if pluginConfig.enabled then
     end)
 
     -- Client Call request
-    RegisterServerEvent('SonoranCAD::callcommands:SendCallApi')
-    AddEventHandler('SonoranCAD::callcommands:SendCallApi', function(playerCoords, caller, location, description, source)
+    RegisterServerEvent('snailyCAD::callcommands:SendCallApi')
+    AddEventHandler('snailyCAD::callcommands:SendCallApi', function(playerCoords, caller, location, description, source)
         -- send an event to be consumed by other resources
         local postal = nil
         if isPluginLoaded("postals") and PostalsCache ~= nil and type(location) ~= 'vector3' then
@@ -82,11 +82,21 @@ if pluginConfig.enabled then
                 }
             }
             debugLog("sending call!")
-            performApiRequest(data, '911-calls','POST','', function() end)
+            performApiRequest(data, '911-calls','POST', function() end)
         else
-            debugPrint("[SonoranCAD] API sending is disabled. Incoming call ignored.")
+            debugPrint("[snailyCAD] API sending is disabled. Incoming call ignored.")
         end
     end)
 
+    ---------------------------------
+    -- Unit Panic
+    ---------------------------------
+    -- shared function to send panic signals
+    function sendPanic(source)
+        -- Determine identifier
+        local identifier = GetIdentifiers(source)[Config.primaryIdentifier]
+        -- Process panic POST request
+        performApiRequest({{['isPanic'] = true, ['apiId'] = identifier}}, 'UNIT_PANIC', function() end)
+    end
 
 end

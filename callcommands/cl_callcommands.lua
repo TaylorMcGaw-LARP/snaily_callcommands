@@ -2,7 +2,7 @@
     Sonaran CAD Plugins
 
     Plugin Name: callcommands
-    Creator: SonoranCAD
+    Creator: snailyCAD
     Description: Implements 311/511/911 commands
 ]]
 local pluginConfig = Config.GetPluginConfig("callcommands")
@@ -13,7 +13,7 @@ if pluginConfig.enabled then
 ---------------------------------------------------------------------------
     CreateThread(function()
         if Config.enable911 then
-            TriggerEvent('chat:addSuggestion', '/911', 'Sends a emergency call to your SonoranCAD', {
+            TriggerEvent('chat:addSuggestion', '/911', 'Sends a emergency call to your snailyCAD', {
                 { name="Description of Call", help="State what the call is about" }
             })
         end
