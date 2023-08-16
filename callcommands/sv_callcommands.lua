@@ -82,7 +82,7 @@ if pluginConfig.enabled then
                 }
             }
             debugLog("sending call!")
-            performApiRequest(data, '911-calls','POST', function() end)
+            performApiRequest(data, '911-calls','false', function() end)
         else
             debugPrint("[snailyCAD] API sending is disabled. Incoming call ignored.")
         end
